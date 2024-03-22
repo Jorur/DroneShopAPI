@@ -65,4 +65,17 @@ class UserRepositoryTest {
         userRepository.saveAll(List.of(user1, user2));
     }
 
+    @Test
+    void findAllMethod(){
+        List<User> users = userRepository.findAll();
+
+        users.forEach(user -> System.out.println(user.getFullName()));
+    }
+
+    @Test
+    void deleteMethod(){
+        Long id = 3L;
+        userRepository.deleteById(id);
+    }
+
 }
