@@ -6,6 +6,7 @@ import org.dronshopapi.dronshopapi.exception.ResourceNotFoundException;
 import org.dronshopapi.dronshopapi.repository.UserRepository;
 import org.dronshopapi.dronshopapi.service.UserService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,8 +15,8 @@ import java.util.stream.Collectors;
 @Service
 public class UserServiceImpl implements UserService{
     private final UserRepository userRepository;
-    private final BCryptPasswordEncoder passwordEncoder;
-    public UserServiceImpl (UserRepository userRepository, BCryptPasswordEncoder passwordEncoder){
+    private final PasswordEncoder passwordEncoder;
+    public UserServiceImpl (UserRepository userRepository, PasswordEncoder passwordEncoder){
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
