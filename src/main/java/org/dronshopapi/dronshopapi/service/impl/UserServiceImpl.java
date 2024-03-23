@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService{
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
     public UserServiceImpl (UserRepository userRepository){
         this.userRepository = userRepository;
     }
@@ -22,8 +22,7 @@ public class UserServiceImpl implements UserService{
         User user = mapToEntity(userDto);
         User newUser = userRepository.save(user);
 
-        UserDto userResponse = mapToDto(newUser);
-        return userResponse;
+        return mapToDto(newUser);
     }
 
     @Override
@@ -35,17 +34,25 @@ public class UserServiceImpl implements UserService{
     @Override
     public List<UserDto> getAllUsers() {
         List<User> users = userRepository.findAll();
-        return users.stream().map(user -> mapToDto(user)).collect(Collectors.toList());
+        return users.stream().map(this::mapToDto).collect(Collectors.toList());
     }
 
     @Override
     public UserDto updateUser(UserDto userDto, Long id) {
-        User existentUser = userRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("User", "id", id));
+        User existingUser = userRepository.findById(id)
+                .orElseThrow(()->new ResourceNotFoundException("User", "id", id));
 
-        existentUser.setUsername(userDto.getUsername());
-        existentUser.setMail(userDto.getMail());
+        existingUser.setFullName(userDto.getFullName());
+        existingUser.setUsername(userDto.getUsername());
+        existingUser.setMail(userDto.getMail());
+        existingUser.setPassword(userDto.getPassword());
+        existingUser.setGender(userDto.getGender());
+        existingUser.setBirthDate(userDto.getBirthDate());
+        existingUser.setPhoneNumber(userDto.getPhoneNumber());
+        existingUser.setAddress(userDto.getAddress());
 
-        User updatedUser = userRepository.save(existentUser);
+
+        User updatedUser = userRepository.save(existingUser);
         return mapToDto(updatedUser);
     }
 
