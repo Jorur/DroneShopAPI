@@ -5,6 +5,7 @@ import org.dronshopapi.dronshopapi.entity.User;
 import org.dronshopapi.dronshopapi.exception.ResourceNotFoundException;
 import org.dronshopapi.dronshopapi.repository.UserRepository;
 import org.dronshopapi.dronshopapi.service.UserService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,8 +14,10 @@ import java.util.stream.Collectors;
 @Service
 public class UserServiceImpl implements UserService{
     private final UserRepository userRepository;
-    public UserServiceImpl (UserRepository userRepository){
+    private final BCryptPasswordEncoder passwordEncoder;
+    public UserServiceImpl (UserRepository userRepository, BCryptPasswordEncoder passwordEncoder){
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -45,7 +48,10 @@ public class UserServiceImpl implements UserService{
         existingUser.setFullName(userDto.getFullName());
         existingUser.setUsername(userDto.getUsername());
         existingUser.setMail(userDto.getMail());
-        existingUser.setPassword(userDto.getPassword());
+
+        if(userDto.getPassword() != null && !userDto.getPassword().isEmpty())
+            existingUser.setPassword(passwordEncoder.encode(userDto.getPassword()));
+
         existingUser.setGender(userDto.getGender());
         existingUser.setBirthDate(userDto.getBirthDate());
         existingUser.setPhoneNumber(userDto.getPhoneNumber());
@@ -85,7 +91,7 @@ public class UserServiceImpl implements UserService{
         user.setFullName(userDto.getFullName());
         user.setUsername(userDto.getUsername());
         user.setMail(userDto.getMail());
-        user.setPassword(userDto.getPassword());
+        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
         user.setGender(userDto.getGender());
         user.setBirthDate(userDto.getBirthDate());
         user.setPhoneNumber(userDto.getPhoneNumber());
