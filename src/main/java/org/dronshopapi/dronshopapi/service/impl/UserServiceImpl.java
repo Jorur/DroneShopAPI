@@ -72,7 +72,7 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public void deletePostById(Long id) {
+    public void deleteUserById(Long id) {
         if (!userRepository.existsById(id)){
             throw new ResourceNotFoundException("Post", "id", id.toString());
         }
