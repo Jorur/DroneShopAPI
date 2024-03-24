@@ -31,7 +31,16 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public UserDto getUserById(Long id) {
-        User user = userRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("User", "id", id));
+        User user = userRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("User", "id", id.toString()));
+        return mapToDto(user);
+    }
+
+    @Override
+    public UserDto getUserByUsername(String username) {
+        User user = userRepository.findByUsername(username);
+        if(user == null){
+            throw new ResourceNotFoundException("User", "username", username);
+        }
         return mapToDto(user);
     }
 
@@ -44,7 +53,7 @@ public class UserServiceImpl implements UserService{
     @Override
     public UserDto updateUser(UserDto userDto, Long id) {
         User existingUser = userRepository.findById(id)
-                .orElseThrow(()->new ResourceNotFoundException("User", "id", id));
+                .orElseThrow(()->new ResourceNotFoundException("User", "id", id.toString()));
 
         existingUser.setFullName(userDto.getFullName());
         existingUser.setUsername(userDto.getUsername());
@@ -66,7 +75,7 @@ public class UserServiceImpl implements UserService{
     @Override
     public void deletePostById(Long id) {
         if (!userRepository.existsById(id)){
-            throw new ResourceNotFoundException("Post", "id", id);
+            throw new ResourceNotFoundException("Post", "id", id.toString());
         }
         userRepository.deleteById(id);
     }
