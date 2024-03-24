@@ -22,12 +22,12 @@ public class AuthenticationController {
         this.userDetailsService = userDetailsService;
     }
     @PostMapping
-    public ResponseEntity<String> authenticate(@RequestBody LoginForm loginForm){
+    public ResponseEntity<UserDetails> authenticate(@RequestBody LoginForm loginForm){
         UserDetails userDetails;
         try {
             userDetails = userDetailsService.loadUserByUsername(loginForm.getUsername());
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
 
         Authentication authentication = authenticationManager.authenticate(
@@ -35,6 +35,6 @@ public class AuthenticationController {
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
         
-        return ResponseEntity.ok("Login successful!");
+        return ResponseEntity.ok(userDetails);
     }
 }

@@ -1,8 +1,6 @@
 package org.dronshopapi.dronshopapi.DTO;
 
 import lombok.Data;
-import org.springframework.cglib.core.Local;
-
 import java.time.LocalDate;
 
 @Data
@@ -16,4 +14,5 @@ public class UserDto {
     private LocalDate birthDate;
     private int phoneNumber;
     private String Address;
+    private String role;
 }

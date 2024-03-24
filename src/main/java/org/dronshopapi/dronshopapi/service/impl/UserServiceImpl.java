@@ -5,7 +5,6 @@ import org.dronshopapi.dronshopapi.entity.User;
 import org.dronshopapi.dronshopapi.exception.ResourceNotFoundException;
 import org.dronshopapi.dronshopapi.repository.UserRepository;
 import org.dronshopapi.dronshopapi.service.UserService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -92,6 +91,7 @@ public class UserServiceImpl implements UserService{
         userDto.setBirthDate(user.getBirthDate());
         userDto.setPhoneNumber(user.getPhoneNumber());
         userDto.setAddress(user.getAddress());
+        userDto.setRole(user.getRole());
 
         return userDto;
     }
@@ -106,6 +106,7 @@ public class UserServiceImpl implements UserService{
         user.setBirthDate(userDto.getBirthDate());
         user.setPhoneNumber(userDto.getPhoneNumber());
         user.setAddress(userDto.getAddress());
+        user.setRole(userDto.getRole());
 
         return user;
     }
