@@ -5,7 +5,6 @@ import org.dronshopapi.dronshopapi.entity.User;
 import org.dronshopapi.dronshopapi.exception.ResourceNotFoundException;
 import org.dronshopapi.dronshopapi.repository.UserRepository;
 import org.dronshopapi.dronshopapi.service.UserService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -31,7 +30,16 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public UserDto getUserById(Long id) {
-        User user = userRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("User", "id", id));
+        User user = userRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("User", "id", id.toString()));
+        return mapToDto(user);
+    }
+
+    @Override
+    public UserDto getUserByUsername(String username) {
+        User user = userRepository.findByUsername(username);
+        if(user == null){
+            throw new ResourceNotFoundException("User", "username", username);
+        }
         return mapToDto(user);
     }
 
@@ -44,7 +52,7 @@ public class UserServiceImpl implements UserService{
     @Override
     public UserDto updateUser(UserDto userDto, Long id) {
         User existingUser = userRepository.findById(id)
-                .orElseThrow(()->new ResourceNotFoundException("User", "id", id));
+                .orElseThrow(()->new ResourceNotFoundException("User", "id", id.toString()));
 
         existingUser.setFullName(userDto.getFullName());
         existingUser.setUsername(userDto.getUsername());
@@ -66,7 +74,7 @@ public class UserServiceImpl implements UserService{
     @Override
     public void deletePostById(Long id) {
         if (!userRepository.existsById(id)){
-            throw new ResourceNotFoundException("Post", "id", id);
+            throw new ResourceNotFoundException("Post", "id", id.toString());
         }
         userRepository.deleteById(id);
     }
@@ -83,6 +91,7 @@ public class UserServiceImpl implements UserService{
         userDto.setBirthDate(user.getBirthDate());
         userDto.setPhoneNumber(user.getPhoneNumber());
         userDto.setAddress(user.getAddress());
+        userDto.setRole(user.getRole());
 
         return userDto;
     }
@@ -97,6 +106,7 @@ public class UserServiceImpl implements UserService{
         user.setBirthDate(userDto.getBirthDate());
         user.setPhoneNumber(userDto.getPhoneNumber());
         user.setAddress(userDto.getAddress());
+        user.setRole(userDto.getRole());
 
         return user;
     }
