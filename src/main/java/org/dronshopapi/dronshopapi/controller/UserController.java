@@ -10,6 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/users")
+@CrossOrigin
 public class UserController {
     private final UserService userService;
 
@@ -30,7 +31,12 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<UserDto> createUser(@RequestBody UserDto userDto){
-        return new ResponseEntity<>(userService.createUser(userDto), HttpStatus.CREATED);
+        try {
+            return new ResponseEntity<>(userService.createUser(userDto), HttpStatus.CREATED);
+        }
+        catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PutMapping("{id}")
