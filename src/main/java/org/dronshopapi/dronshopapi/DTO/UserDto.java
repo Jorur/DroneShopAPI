@@ -13,6 +13,6 @@ public class UserDto {
     private char gender;
     private LocalDate birthDate;
     private int phoneNumber;
-    private String Address;
+    private String address;
     private String role;
 }
